@@ -80,13 +80,9 @@ Este proyecto demuestra habilidades en:
 
 ---
 
-## Capturas / Demo (opcional)
+## Capturas 
 
-Puedes agregar aquí:
-- captura del formulario de verificación,
-- captura del panel admin,
-- captura de la página de validación,
-- ejemplo de PDF (con datos anonimizados).
+1) <img width="1439" height="896" alt="image" src="https://github.com/user-attachments/assets/e1c7ac10-96e0-4b6e-9c6b-b3324c8264ed" />
 
 ---
 

@@ -1,6 +1,6 @@
 # Plataforma de Certificados Verificables (PDF + Código + QR)
 
-Este proyecto nació de una necesidad real: en el **Cabildo Indígena La Peñata** (comunidad a la que pertenezco) se requería una herramienta para **generar certificados de forma ágil**, con **control administrativo**, y con un mecanismo de **verificación confiable** para evitar falsificaciones o dudas sobre su autenticidad.
+Este proyecto nació de una necesidad real: en el **Cabildo Indígena La Peñata** en sincelejo sucre, se requería una herramienta para **generar certificados de forma ágil**, con **control administrativo**, y con un mecanismo de **verificación confiable** para evitar falsificaciones o dudas sobre su autenticidad.
 
 La idea fue construir una aplicación web sencilla de usar, pero sólida por dentro: permite emitir certificados en PDF, registrar cada emisión y que cualquier entidad receptora pueda **validar el documento** usando un **código único** y un **QR**.
 
@@ -80,13 +80,9 @@ Este proyecto demuestra habilidades en:
 
 ---
 
-## Capturas / Demo (opcional)
+## Capturas 
 
-Puedes agregar aquí:
-- captura del formulario de verificación,
-- captura del panel admin,
-- captura de la página de validación,
-- ejemplo de PDF (con datos anonimizados).
+1) <img width="1439" height="896" alt="image" src="https://github.com/user-attachments/assets/e1c7ac10-96e0-4b6e-9c6b-b3324c8264ed" />
 
 ---
 

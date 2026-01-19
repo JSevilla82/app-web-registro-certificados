@@ -83,6 +83,8 @@ Este proyecto demuestra habilidades en:
 ## Capturas 
 
 1) <img width="1439" height="896" alt="image" src="https://github.com/user-attachments/assets/e1c7ac10-96e0-4b6e-9c6b-b3324c8264ed" />
+2) <img width="1500" height="906" alt="image" src="https://github.com/user-attachments/assets/82d1f338-9a49-42af-a879-9728865f299d" />
+
 
 ---
 

@@ -1,0 +1,15 @@
+Flask>=2.3
+Flask-SQLAlchemy>=3.0
+python-dotenv>=1.0
+
+# Seguridad y hardening
+Flask-WTF>=1.2
+Flask-Limiter>=3.5
+Flask-Talisman>=1.1
+
+# PDF / QR
+reportlab>=4.0
+qrcode[pil]>=7.4
+
+# Zona Horaria
+tzdata

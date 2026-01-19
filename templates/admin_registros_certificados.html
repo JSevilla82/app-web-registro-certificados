@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% set active="admin" %}
+
+{% block title %}Registros de certificados · Panel Admin{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Registros de certificados</h2>
+    <p>Consulte el historial de certificados generados, revise sus detalles y acceda a los enlaces de verificación.</p>
+  </div>
+</section>
+
+<div class="cards-stack cards-stack--wide">
+  <div class="card">
+    <div class="fade-in">
+
+      <div class="admin-toolbar admin-toolbar--compact">
+        <div class="admin-toolbar__left">
+          <div class="chip-row" aria-label="Filtros">
+            <a class="chip {% if origen=='todos' %}chip--active{% endif %}" href="{{ url_for('admin_registros_certificados') }}">Todos</a>
+            <a class="chip {% if origen=='usuario' %}chip--active{% endif %}" href="{{ url_for('admin_registros_certificados', origen='usuario') }}">Usuarios</a>
+            <a class="chip {% if origen=='admin' %}chip--active{% endif %}" href="{{ url_for('admin_registros_certificados', origen='admin') }}">Admin</a>
+          </div>
+          <div class="admin-meta">
+            <span class="muted">Total: <strong>{{ total }}</strong></span>
+            {% if admin_nombre or admin_username %}
+            <span class="muted">·</span>
+            <span class="muted">{{ admin_nombre|default('') }}{% if admin_username %}<span class="muted"> ({{ admin_username }})</span>{% endif %}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="admin-toolbar__right">
+          <form method="get" action="{{ url_for('admin_registros_certificados') }}" class="admin-search" role="search">
+            {% if origen and origen!='todos' %}<input type="hidden" name="origen" value="{{ origen }}">{% endif %}
+            <input name="q" value="{{ q|default('') }}" placeholder="Buscar por código, documento o nombre" autocomplete="off">
+            <button type="submit" class="btn-small btn-small--primary">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <span>Buscar</span>
+            </button>
+          </form>
+          <a href="{{ url_for('admin_panel') }}" class="btn-small btn-small--solid">
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
+            <span>Volver</span>
+          </a>
+        </div>
+      </div>
+
+      {% if not rows %}
+        <div class="empty-state">
+          <h3>Sin registros</h3>
+          <p>No hay certificados para mostrar con este filtro.</p>
+        </div>
+      {% else %}
+
+      <!-- Tabla (PC) -->
+      <div class="admin-table-wrap admin-table-wrap--compact admin-registros__tabla" aria-label="Listado de certificados">
+        <table class="admin-table admin-table--compact">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Titular</th>
+              <th>Documento</th>
+              <th>Emisión</th>
+              <th>Tipo</th>
+              <th>Origen</th>
+              <th>Estado</th>
+              <th class="admin-col-actions">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rows %}
+            <tr>
+              <td>
+                <div class="cell-code">{{ r.codigo }}</div>
+              </td>
+              <td>
+                <div class="cell-name">{{ r.nombre }}</div>
+              </td>
+              <td>
+                <div class="cell-text">{{ r.tipo_doc }} {{ r.num_doc }}</div>
+              </td>
+              <td>
+                <div class="cell-text">{{ r.emision_str }}</div>
+              </td>
+              <td>
+                <span class="tag {% if r.tipo_documento=='certificado_especial' %}tag--info{% else %}tag--ok{% endif %}">
+                  {{ r.tipo_label }}
+                </span>
+              </td>
+              <td>
+                <span class="tag {% if r.generado_por=='admin' %}tag--warn{% else %}tag--ok{% endif %}">
+                  {{ 'Admin' if r.generado_por=='admin' else 'Usuario' }}
+                </span>
+              </td>
+              <td>
+                {% if r.activo %}
+                  <span class="tag tag--ok">Afiliado</span>
+                {% else %}
+                  <span class="tag tag--off">No afiliado</span>
+                {% endif %}
+              </td>
+              <td class="admin-col-actions">
+                <a class="btn-small btn-small--primary" href="{{ r.verify_link }}" target="_blank" rel="noopener">
+                  <i data-lucide="scan-search" aria-hidden="true"></i>
+                  <span>Verificar</span>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tarjetas (móvil) -->
+      <div class="admin-cards admin-cards--compact" aria-label="Listado de certificados móvil">
+        {% for r in rows %}
+        <div class="admin-card">
+          <div class="admin-card__top">
+            <div>
+              <div class="cell-code">{{ r.codigo }}</div>
+              <div class="cell-sub">{{ r.emision_str }}</div>
+            </div>
+            <div>
+              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+                <span class="tag {% if r.tipo_documento=='certificado_especial' %}tag--info{% else %}tag--ok{% endif %}">
+                  {{ r.tipo_label }}
+                </span>
+                <span class="tag {% if r.generado_por=='admin' %}tag--warn{% else %}tag--ok{% endif %}">
+                  {{ 'Admin' if r.generado_por=='admin' else 'Usuario' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card__mid">
+            <div class="cell-name">{{ r.nombre }}</div>
+            <div class="cell-sub">{{ r.tipo_doc }} {{ r.num_doc }}</div>
+            <div style="margin-top:8px;">
+              {% if r.activo %}
+                <span class="tag tag--ok">Afiliado</span>
+              {% else %}
+                <span class="tag tag--off">No afiliado</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="admin-card__actions">
+            <a class="btn-small btn-small--primary" href="{{ r.verify_link }}" target="_blank" rel="noopener">
+              <i data-lucide="scan-search" aria-hidden="true"></i>
+              <span>Verificar</span>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% endif %}
+
+      {% if pages and pages > 1 %}
+      <div class="pagination" aria-label="Paginación">
+        {% if prev_url %}<a class="btn-small" href="{{ prev_url }}">← Anterior</a>{% endif %}
+        <span class="muted">Página <strong>{{ page }}</strong> de <strong>{{ pages }}</strong></span>
+        {% if next_url %}<a class="btn-small" href="{{ next_url }}">Siguiente →</a>{% endif %}
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="padding: 20px 0; max-width: 1000px;">
+  <h3 style="margin-bottom: 10px;">
+    Certificado — {{ c.nombre_completo }}
+  </h3>
+
+  <div style="display:flex; gap:10px; margin-bottom: 12px; flex-wrap: wrap;">
+    <a href="{{ pdf_url }}" target="_blank"
+       style="padding:10px 14px; background:#2e7d32; color:#fff; text-decoration:none; border-radius:4px;">
+      Abrir PDF
+    </a>
+
+    <button id="btnPrint"
+      style="padding:10px 14px; background:#1565c0; color:#fff; border:none; cursor:pointer; border-radius:4px;">
+      Imprimir
+    </button>
+  </div>
+
+  <div style="border:1px solid #ddd; border-radius:6px; overflow:hidden; height: 80vh;">
+    <iframe id="pdfFrame"
+            src="{{ pdf_url }}"
+            style="width:100%; height:100%; border:0;"
+            loading="lazy"></iframe>
+  </div>
+
+  <p style="margin-top: 10px; color:#666; font-size: 0.9rem;">
+    Nota: el certificado se genera en el servidor como PDF.
+  </p>
+</div>
+
+<script>
+  // Imprime el PDF embebido en el iframe (misma pestaña).
+  document.getElementById('btnPrint').addEventListener('click', () => {
+    const marcoPdf = document.getElementById('pdfFrame');
+    if (marcoPdf && marcoPdf.contentWindow) marcoPdf.contentWindow.print();
+  });
+</script>
+{% endblock %}

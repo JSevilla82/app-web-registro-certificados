@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Certificado no disponible</h2>
+    <p>El archivo PDF ya no está disponible para descarga o visualización.</p>
+  </div>
+</section>
+
+<div class="card" style="text-align:center;">
+  <p style="color:#666;">Código: <span style="font-family: monospace;">{{ codigo }}</span></p>
+  <p style="color:#666; margin-top: 10px;">Los archivos se mantienen disponibles por 24 horas. Si lo requiere, genere un nuevo certificado desde la sección Certificados.</p>
+  <a href="{{ url_for('certificado') }}" class="btn-submit" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 16px; margin-top: 10px;">Ir a Certificados</a>
+</div>
+{% endblock %}

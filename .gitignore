@@ -1,0 +1,48 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# DB local (la dejamos en el ZIP, pero normalmente no se versiona)
+database/*.db
+
+# PDFs generados
+generated/
+
+# Variables de entorno
+.env
+
+
+# --- Entorno ---
+.env
+.env.*
+
+# --- Base de datos (SQLite) ---
+database/*.db
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# --- PDFs / archivos generados ---
+generated/*
+!generated/.gitkeep
+
+# --- Certificados / llaves (si los usas) ---
+*.pem
+*.key
+*.crt
+*.pfx

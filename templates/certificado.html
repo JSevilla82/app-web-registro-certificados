@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% set active="certificado" %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Certificados</h2>
+    <p>Complete los campos para validar su identidad en el censo oficial.</p>
+  </div>
+</section>
+
+<div class="cards-stack">
+
+  <!-- Card principal (flujo: documento -> fecha nacimiento -> listo / error) -->
+  <div class="card" id="certCard" data-min-transition="{{ ui_min_transition_seconds|default(2) }}">
+
+    <!-- Paso 1: Formulario -->
+    <div id="stepForm">
+      <form id="certForm" novalidate>
+        <div class="form-group">
+          <label for="docType">Tipo de Identificación</label>
+          <select id="docType" required>
+            <option value="" disabled selected>Seleccione...</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="TI">Tarjeta de Identidad</option>
+            <option value="RC">Registro Civil</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="docNumber">Número de Documento</label>
+          <input id="docNumber" type="tel" inputmode="numeric" placeholder="Ingrese solo números" required>
+          <p style="margin-top:8px; color:#888; font-size:0.85rem;">Por seguridad, solo se aceptan números.</p>
+        </div>
+
+        <div id="formError"
+          style="display:none; background:#ffebee; color:#b71c1c; padding:12px; border-radius:12px; margin-bottom: 14px;">
+          <strong style="display:block; margin-bottom:4px;">Atención</strong>
+          <span id="formErrorText"></span>
+        </div>
+
+        <button id="btnVerificar" type="submit" class="btn-submit">VERIFICAR INFORMACIÓN</button>
+      </form>
+    </div>
+
+    <!-- Paso 2: Reto de fecha de nacimiento -->
+    <div id="stepBirthdate" style="display:none;">
+      <h3 style="margin-top: 0;">Verificación adicional</h3>
+      <p style="color:#666; font-size:0.95rem; margin-top: 6px;">
+        Ingrese su fecha de nacimiento para verificar la titularidad de este certificado.
+      </p>
+
+      <div class="date-field" style="margin-top: 14px;">
+        <label for="birthdateInput" style="margin-bottom: 6px;">Fecha de nacimiento</label>
+        <input id="birthdateInput" type="date" class="input input-date" style="width:100%;" required>
+        <button id="btnOpenCalendar" type="button" class="date-icon" aria-label="Abrir calendario">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm14 9H3v9a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-9ZM5 9h14V7a1 1 0 0 0-1-1h-1v1a1 1 0 1 1-2 0V6H9v1a1 1 0 0 1-2 0V6H6a1 1 0 0 0-1 1v2Z" />
+          </svg>
+        </button>
+        <p style="margin: 10px 0 0 0; color:#666; font-size:0.9rem;">Seleccione la fecha en el calendario.</p>
+      </div>
+
+      <div id="birthError"
+        style="display:none; background:#ffebee; color:#b71c1c; padding:12px; border-radius:12px; margin-top: 14px;">
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap: wrap; margin-top: 16px;">
+        <button id="btnConfirmarFecha" type="button" class="btn-submit"
+          style="width:auto; flex: 1; min-width: 190px;">CONFIRMAR</button>
+        <button id="btnSalir" type="button" class="btn-secondary"
+          style="width:auto; flex: 1; min-width: 160px;">SALIR</button>
+      </div>
+    </div>
+
+    <!-- Paso 3: Confirmación (después de validar fecha) -->
+    <div id="stepConfirm" style="display:none;">
+      <div style="background:#f5f7fa; border:1px solid #e5ebf2; padding:12px; border-radius:14px; margin-bottom: 14px;">
+        <p style="margin:0; font-weight: 700;" id="confirmNombre"></p>
+        <p style="margin:4px 0 0 0; color:#666; font-size: 0.92rem;" id="confirmDoc" class="doc-mask"></p>
+      </div>
+
+      <div style="background:#fff; border:1px solid #e6ebf1; padding:14px; border-radius:14px; margin-bottom: 14px;">
+        <div style="font-weight:700; margin-bottom:6px;">Revise la información antes de generar</div>
+        <div style="color:#667085; font-size:0.92rem;">Si todo está correcto, continúe con la emisión del certificado.</div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap: wrap; justify-content:center;">
+        <button id="btnConfirmAtras" type="button" class="btn-secondary" style="width:auto; min-width: 200px;">
+          <i data-lucide="arrow-left" aria-hidden="true"></i>
+          <span>Atrás</span>
+        </button>
+        <button id="btnConfirmGenerar" type="button" class="btn-submit" style="width:auto; min-width: 200px;">
+          <i data-lucide="file-plus" aria-hidden="true"></i>
+          <span>Generar certificado</span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Paso intermedio: Transición en la misma página -->
+    <div id="stepLoading" style="display:none; text-align:center; padding: 8px 0;">
+      <div class="inline-loader">
+        <div class="inline-loader__spinner"></div>
+        <h3 id="loadingTitle" style="margin: 16px 0 6px 0;">Procesando...</h3>
+        <p id="loadingSubtitle" style="margin:0; color:#666; font-size: 0.95rem;">Por favor espere</p>
+      </div>
+    </div>
+
+    <!-- Paso 4: Listo para descargar -->
+    <div id="stepReady" style="display:none; text-align: center; padding: 10px 0;">
+      <div style="background: #e8f5e9; color: #2e7d32; padding: 15px; border-radius: 12px; margin-bottom: 14px;">
+        <h3 style="margin:0;">Tu documento está listo</h3>
+        <p style="margin:6px 0 0 0; font-size: 0.9rem;" id="readyMsg">Puede descargarlo.</p>
+      </div>
+
+      <p style="margin-bottom: 5px; font-weight: bold;" id="resNombre"></p>
+      <p style="color: #666; font-size: 0.9rem;" id="resDoc" class="doc-mask"></p>
+      <p style="color: #666; font-size: 0.85rem; margin-top: 6px;">Código de verificación: <span id="resCodigo"
+          style="font-family: monospace;"></span></p>
+
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap: wrap;">
+        <a id="btnDescargar" href="#" class="btn-submit"
+          style="text-decoration: none; display: inline-block; background: #2e7d32; width:auto; padding: 12px 16px;">
+          DESCARGAR
+        </a>
+
+        <a id="btnVerCertificado" href="#" target="_blank" rel="noopener" class="btn-submit"
+          style="text-decoration: none; display: inline-block; background: #1565c0; width:auto; padding: 12px 16px;">
+          VER CERTIFICADO
+        </a>
+      </div>
+
+      <p style="margin-top: 14px; color:#666; font-size:0.85rem;">
+        Verificación pública: <br>
+        <a id="verifyLink" href="#" target="_blank"
+          style="word-break: break-all; color: var(--primary); text-decoration: underline;"></a>
+      </p>
+
+      <button id="btnOtraConsulta" type="button"
+        style="margin-top: 10px; background: none; border: none; color: #0f3a5f; cursor: pointer; text-decoration: underline;">
+        Realizar otra consulta
+      </button>
+
+      <p style="margin-top: 12px; color:#777; font-size:0.82rem;">
+        La herramienta mantiene un único certificado generado por día. Al cambiar la fecha se emitirá uno nuevo.
+      </p>
+    </div>
+
+    <!-- Error -->
+    <div id="stepError" style="display:none; text-align: center; padding: 10px 0;">
+      <div style="background: #ffebee; color: #b71c1c; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+        <h3 style="margin:0;">No fue posible continuar</h3>
+        <p style="margin:6px 0 0 0; font-size: 0.9rem;" id="errorText"></p>
+      </div>
+
+      <button id="btnReintentar" type="button" class="btn-submit" style="background: var(--primary);">
+        Intentar de nuevo
+      </button>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

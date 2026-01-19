@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div id="verifyLoading" class="card card-page" style="text-align:center;">
+  <div class="inline-loader">
+    <div class="inline-loader__spinner"></div>
+    <h3 style="margin: 16px 0 6px 0;">Validando certificado...</h3>
+    <p style="margin:0; color:#666; font-size:0.95rem;">Consultando el sistema de verificación</p>
+  </div>
+</div>
+
+<div id="verifyContent">
+
+
+{% if found %}
+<div class="card card-page" style="text-align: center; border-top: 5px solid #2e7d32;">
+  <h2 style="color: #2e7d32;">Documento verificado</h2>
+  <p>Este certificado fue generado desde la plataforma oficial del Cabildo.</p>
+
+  <div style="background: #f1f8f1; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: left; border: 1px solid #c8e6c9;">
+    <p><strong>Nombre:</strong> {{ c.nombre_completo }}</p>
+    <p><strong>Identificación:</strong> {{ c.tipo_documento }} ********{{ c.numero_documento[-3:] }}</p>
+    <p><strong>Estado:</strong> Miembro Activo</p>
+    <p><strong>Fecha de emisión:</strong> {{ doc.creado_en.strftime('%d/%m/%Y %I:%M %p') }}</p>
+  </div>
+
+  <p style="font-size: 0.8rem; color: #666;">Código de verificación:<br>
+    <span style="font-family: monospace;">{{ doc.codigo }}</span>
+  </p>
+
+  {% if ver_doc_disponible and ver_doc_url %}
+  <div style="margin-top: 14px;">
+    <a href="{{ ver_doc_url }}" target="_blank" rel="noopener" class="btn-submit" style="text-decoration:none; display:inline-block; width:auto; padding: 12px 16px; background:#1565c0;">
+      VER DOCUMENTO
+    </a>
+    <p style="margin: 10px 0 0 0; color:#666; font-size:0.85rem;">
+      Este documento se muestra como copia para fines de verificación.
+    </p>
+  </div>
+  {% else %}
+  <p style="margin-top: 14px; color:#888; font-size:0.85rem;">
+    La visualización del documento no está disponible porque fue eliminado por reglas de retención de datos.
+  </p>
+  {% endif %}
+</div>
+{% else %}
+<div class="card card-page" style="text-align: center; border-top: 5px solid #d32f2f;">
+  <h2 style="color: #d32f2f;">Documento no encontrado</h2>
+  <p>El código de verificación no existe o el documento no es válido.</p>
+
+  <div style="background: #ffebee; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: left; border: 1px solid #ffcdd2;">
+    <p style="margin:0; color:#b71c1c;">Verifique que la URL o el código QR estén completos y no hayan sido modificados.</p>
+  </div>
+
+  <p style="font-size: 0.8rem; color: #666;">Si el problema persiste, contacte al Cabildo.</p>
+</div>
+{% endif %}
+
+</div>
+
+{% endblock %}

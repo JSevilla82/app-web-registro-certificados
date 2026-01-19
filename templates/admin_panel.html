@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% set active="admin" %}
+
+{% block title %}Panel Admin · Cabildo Indígena de la Peñata{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Panel Admin</h2>
+    <p>Gestione certificados, ciudadanos y consulte el historial de emisiones.</p>
+  </div>
+</section>
+
+<div class="cards-stack cards-stack--wide admin-panel">
+  <div class="card">
+    <div class="fade-in" style="text-align:center; padding: 8px 0;">
+      <div style="background:#e8f5e9; color:#2e7d32; padding: 15px; border-radius: 12px; margin-bottom: 14px;">
+        <h3 style="margin:0;">Bienvenido</h3>
+        {% if admin_nombre %}
+        <p style="margin:6px 0 0 0; font-size: 0.92rem;">
+          <strong>{{ admin_nombre }}</strong>{% if admin_username %} <span style="color:#1b5e20;">({{ admin_username }})</span>{% endif %}.
+        </p>
+        {% elif admin_username %}
+        <p style="margin:6px 0 0 0; font-size: 0.92rem;"><strong>{{ admin_username }}</strong>.</p>
+        {% else %}
+        <p style="margin:6px 0 0 0; font-size: 0.92rem;">Bienvenido.</p>
+        {% endif %}
+      </div>
+
+      <p style="color:#666; font-size: 0.95rem; margin: 0;">
+        Seleccione una opción para continuar.
+      </p>
+
+      <div style="margin-top: 18px;">
+        <h3 style="margin: 0 0 12px 0;">Opciones disponibles</h3>
+
+        <div class="services-grid">
+          <a class="service-item" href="{{ url_for('admin_certificado') }}">
+            <div class="service-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="12" x2="12" y2="18"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <div class="service-item__body">
+              <div class="service-item__title">Generar certificado (Admin)</div>
+                <div class="service-item__desc">Genere un certificado desde el panel, sin solicitar fecha de nacimiento.</div>
+            </div>
+            <div class="service-item__cta">Abrir</div>
+          </a>
+
+          <a class="service-item" href="{{ url_for('admin_certificado_especial') }}">
+            <div class="service-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M8 13h5"/>
+                <path d="M8 17h3"/>
+                <path d="M15.5 13.5 19 17"/>
+                <path d="M14 18l-1 3 3-1 5-5a1.4 1.4 0 0 0 0-2l-1-1a1.4 1.4 0 0 0-2 0l-5 5z"/>
+              </svg>
+            </div>
+            <div class="service-item__body">
+              <div class="service-item__title">Certificado especial (Admin)</div>
+                <div class="service-item__desc">Cree un certificado con mensaje personalizado para reconocer una labor o participación.</div>
+            </div>
+            <div class="service-item__cta">Abrir</div>
+          </a>
+
+          <a class="service-item" href="{{ url_for('admin_ciudadanos') }}">
+            <div class="service-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="service-item__body">
+              <div class="service-item__title">Gestión de ciudadanos</div>
+                <div class="service-item__desc">Administre el censo: registre ciudadanos y controle su afiliación.</div>
+            </div>
+            <div class="service-item__cta">Abrir</div>
+          </a>
+
+          <a class="service-item" href="{{ url_for('admin_registros_certificados') }}">
+            <div class="service-item__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9"/>
+                <path d="M3 4v5h5"/>
+                <path d="M12 7v5l4 2"/>
+              </svg>
+            </div>
+            <div class="service-item__body">
+              <div class="service-item__title">Registros de certificados</div>
+                <div class="service-item__desc">Revise el historial de certificados y acceda a la verificación en línea.</div>
+            </div>
+            <div class="service-item__cta">Abrir</div>
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; display:flex; gap:10px; flex-wrap: wrap; justify-content:center;">
+        <a href="{{ url_for('home') }}" class="btn-secondary" style="width:auto; min-width: 160px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+          Volver a inicio
+        </a>
+
+        <a href="{{ url_for('admin_logout') }}" class="btn-secondary" style="width:auto; min-width: 160px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+          Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

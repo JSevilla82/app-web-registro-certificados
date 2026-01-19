@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% set active="admin" %}
+
+{% block title %}Admin · Cabildo Indígena de la Peñata{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Admin</h2>
+    <p>Ingreso al panel de administración.</p>
+  </div>
+</section>
+
+<div class="cards-stack">
+  <div class="card" id="adminLoginCard" data-min-transition="{{ ui_min_transition_seconds|default(2) }}">
+
+    <!-- Paso 1: Formulario -->
+    <div id="adminStepForm">
+      <form id="adminLoginForm" method="post" action="{{ url_for('admin_login_post') }}" novalidate>
+        {% if csrf_token is defined %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% endif %}
+
+        <div class="form-group">
+          <label for="adminUser">Usuario</label>
+          <input id="adminUser" name="username" type="text" autocomplete="username" placeholder="Ingrese su usuario" required value="{{ username|default('') }}">
+        </div>
+
+        <div class="form-group">
+          <label for="adminPass">Contraseña</label>
+          <input id="adminPass" name="password" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña" required>
+        </div>
+
+        {% if error %}
+        <div style="background:#ffebee; color:#b71c1c; padding:12px; border-radius:12px; margin-bottom: 14px; text-align:center;">
+          <strong style="display:block; margin-bottom:6px;">No fue posible iniciar sesión</strong>
+          <span style="display:block; line-height:1.35;">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <div id="adminError" style="display:none; background:#ffebee; color:#b71c1c; padding:12px; border-radius:12px; margin-bottom: 14px; text-align:center;">
+          <strong style="display:block; margin-bottom:6px;">Falta información</strong>
+          <span id="adminErrorText">Debe ingresar usuario y contraseña.</span>
+        </div>
+
+        <button type="submit" class="btn-submit">INICIAR SESIÓN</button>
+      </form>
+
+      {% if attempt_info %}
+      {% set is_lockout = 'bloqueo' in (attempt_info|lower) %}
+      <p class="login-attempt-info {% if is_lockout %}login-attempt-info--lockout{% endif %}">
+        {{ attempt_info }}
+      </p>
+      {% endif %}
+
+      <p style="margin-top: 10px; color:#666; font-size:0.86rem; text-align:center;">
+        Si olvidó su usuario o contraseña, comuníquese con la Junta Directiva del Cabildo.
+      </p>
+    </div>
+
+    <!-- Paso 2: Transición de login -->
+    <div id="adminStepLoading" style="display:none; text-align:center; padding: 8px 0;">
+      <div class="inline-loader">
+        <div class="inline-loader__spinner"></div>
+        <h3 id="adminLoadingTitle" style="margin: 16px 0 6px 0;">Iniciando sesión...</h3>
+        <p id="adminLoadingSubtitle" style="margin:0; color:#666; font-size: 0.95rem;">Validando credenciales</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <meta name="theme-color" content="#0B2F4E">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="csrf-token" content="{{ csrf_token() if csrf_token is defined else '' }}">
+  <title>{% block title %}Cabildo Indígena de la Peñata{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+</head>
+
+<body data-ui-min-transition="{{ ui_min_transition_seconds|default(2) }}"
+  data-verify-min-seconds="{{ ui_min_transition_seconds|default(2) }}">
+
+  <header class="header">
+    <div class="brand-bar">
+      <div class="brand-container" style="display: flex; align-items: center; gap: 15px;">
+
+        <div class="logo-circle" style="
+    width: 90px; 
+    height: 90px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    border: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  ">
+          <img src="/static/img/logo_small.png" alt="Logo Cabildo"
+            style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+        <div class="brand-text">
+          <h1 style="margin: 0; font-size: 1.5rem; line-height: 1.2; color: var(--text-color);">
+            Cabildo Indígena <br> La Peñata
+          </h1>
+        </div>
+
+      </div>
+    </div>
+
+    <nav class="nav-bar">
+
+      <!-- Desktop: tabs -->
+      <div class="nav-container nav-desktop">
+        <a href="{{ url_for('home') }}" class="nav-link {% if active=='inicio' %}active{% endif %}">
+          <span class="nav-ico" aria-hidden="true"><i data-lucide="home"></i></span>
+          <span>Inicio</span>
+        </a>
+
+        <div class="nav-dropdown {% if active in ['certificado','verificar'] %}active{% endif %}">
+          <button type="button"
+            class="nav-link nav-dropdown__toggle {% if active in ['certificado','verificar'] %}active{% endif %}"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="nav-ico" aria-hidden="true"><i data-lucide="file-text"></i></span>
+            <span>Certificados</span>
+            <span class="nav-ico" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+          </button>
+
+          <div class="nav-dropdown__menu" role="menu" aria-label="Certificados">
+            <a href="{{ url_for('certificado') }}"
+              class="nav-dropdown__item {% if active=='certificado' %}active{% endif %}" role="menuitem">
+              <span class="nav-ico" aria-hidden="true"><i data-lucide="badge-check"></i></span>
+              <span>Generar certificado</span>
+            </a>
+            <a href="{{ url_for('publico.verificar_certificados') }}"
+              class="nav-dropdown__item {% if active=='verificar' %}active{% endif %}" role="menuitem">
+              <span class="nav-ico" aria-hidden="true"><i data-lucide="scan-search"></i></span>
+              <span>Verificar certificado</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="{{ url_for('admin_login') }}" class="nav-link {% if active=='admin' %}active{% endif %}">
+          <span class="nav-ico" aria-hidden="true"><i data-lucide="shield"></i></span>
+          <span>Administrador</span>
+        </a>
+
+        <!-- <a href="#" class="nav-link">
+          <span class="nav-ico" aria-hidden="true"><i data-lucide="mail"></i></span>
+          <span>Contacto</span>
+        </a> -->
+      </div>
+
+      <!-- Mobile: drawer menu -->
+      <div class="nav-mobile" id="navMobile">
+        <div class="nav-mobile__bar">
+          <div class="nav-mobile__bar-inner">
+            <button class="nav-mobile__toggle" type="button" aria-controls="navMobileDrawer" aria-expanded="false">
+              <span class="nav-ico" aria-hidden="true"><i data-lucide="menu"></i></span>
+              <span>Menú</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-mobile__backdrop" data-nav-close></div>
+
+        <aside class="nav-mobile__drawer" id="navMobileDrawer" aria-label="Menú">
+          <div class="nav-mobile__header">
+            <div class="nav-mobile__title">Menú</div>
+            <button class="nav-mobile__close" type="button" aria-label="Cerrar" data-nav-close>
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <a href="{{ url_for('home') }}" class="nav-mobile__link {% if active=='inicio' %}active{% endif %}">
+            <span class="nav-ico" aria-hidden="true"><i data-lucide="home"></i></span>
+            <span>Inicio</span>
+          </a>
+
+          <div class="nav-mobile__group {% if active in ['certificado','verificar'] %}open{% endif %}">
+            <button class="nav-mobile__group-btn" type="button" aria-expanded="false">
+              <span class="nav-ico" aria-hidden="true"><i data-lucide="file-text"></i></span>
+              <span>Certificados</span>
+              <span class="nav-ico nav-mobile__chev" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="nav-mobile__sub">
+              <a href="{{ url_for('certificado') }}" class="nav-mobile__sublink {% if active=='certificado' %}active{% endif %}">
+                <span class="nav-ico" aria-hidden="true"><i data-lucide="badge-check"></i></span>
+                <span>Generar certificado</span>
+              </a>
+              <a href="{{ url_for('publico.verificar_certificados') }}" class="nav-mobile__sublink {% if active=='verificar' %}active{% endif %}">
+                <span class="nav-ico" aria-hidden="true"><i data-lucide="scan-search"></i></span>
+                <span>Verificar certificado</span>
+              </a>
+            </div>
+          </div>
+
+          <a href="{{ url_for('admin_login') }}" class="nav-mobile__link {% if active=='admin' %}active{% endif %}">
+            <span class="nav-ico" aria-hidden="true"><i data-lucide="shield"></i></span>
+            <span>Administrador</span>
+          </a>
+
+          <div class="nav-mobile__footer" aria-label="Información">
+            <div class="nav-mobile__footer-title">Cabildo Indígena de la Peñata</div>
+            <div>© 2026 · Todos los derechos reservados</div>
+            <div class="nav-mobile__footer-line nav-mobile__footer-line--nowrap">
+              Impulsa Junta Directiva · Desarrollado por
+              <a href="https://www.linkedin.com/in/jsevilla1208/" target="_blank" rel="noopener">Jairo&nbsp;Sevilla</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+<div class="container">
+  <p><strong>Cabildo Indígena de la Peñata</strong></p>
+  <p>
+    © <span id="year"></span> · Todos los derechos reservados
+    <br>
+    Impulsa Junta Directiva · Desarrollado por 
+    <a href="https://www.linkedin.com/in/jsevilla1208/" 
+       target="_blank" 
+       rel="noopener"
+       class="link-respiracion">
+      Jairo Sevilla
+    </a>
+  </p>
+</div>
+
+
+  </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  </script>
+</body>
+
+</html>

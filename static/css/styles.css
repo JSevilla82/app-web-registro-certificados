@@ -1,0 +1,1766 @@
+:root {
+  --primary: #0B2F4E;
+  --primary-dark: #072238;
+  --accent: #d4af37;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --bg: #f9fafb;
+  --white: #ffffff;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 14px;
+  --container-max: 1280px;
+  --container-wide: 1400px;
+  /* Espaciado para móviles con notch */
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  -webkit-tap-highlight-color: transparent; /* Quita el recuadro azul al tocar en móvil */
+}
+
+body {
+  font-family: var(--font);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Texto enmascarado (documentos): evita variación visual de los asteriscos y alinea números */
+.doc-mask {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+.container {
+  width: min(var(--container-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* Evita el scroll del body cuando abrimos el menú móvil */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* Contenedor global (usado en héroes, footer y secciones) */
+.container {
+  width: min(var(--container-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* HEADER CONSTRUIDO PARA EL PULGAR */
+.header {
+  background: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.brand-bar {
+  background: var(--primary);
+  color: var(--white);
+  padding: calc(12px + var(--safe-top)) 0 12px;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(var(--container-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.logo-circle {
+  width: 44px; /* Tamaño optimizado */
+  height: 44px;
+  background: var(--white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--accent);
+}
+
+.brand-text h1 {
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  /* El logo y el título en base.html tienen estilos inline; usamos !important para ajustar en móvil */
+  .logo-circle { width: 56px !important; height: 56px !important; }
+  .brand-text h1 { font-size: 1.05rem !important; }
+  .brand-bar { padding: calc(10px + var(--safe-top)) 0 10px; }
+}
+
+/* NAVEGACIÓN TIPO TABS (Fácil de usar con una mano) */
+.nav-bar {
+  background: var(--white);
+  /*
+    Importante:
+    El menú desplegable (Certificados) usa un panel absoluto.
+    En varios navegadores, si el contenedor mantiene overflow-y restringido,
+    el panel queda recortado y parece que "no funciona".
+  */
+  overflow-x: auto;
+  overflow-y: visible;
+  position: relative;
+  scrollbar-width: none; /* Oculta scroll en Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-bar::-webkit-scrollbar { display: none; } /* Oculta scroll en Chrome/Safari */
+
+.nav-container {
+  display: flex;
+  justify-content: flex-start;
+  width: min(var(--container-max), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+  .nav-container {
+    justify-content: center;
+  }
+}
+
+/* En tablas, evitamos que los botones de acción se vayan a 2 líneas */
+.admin-ciudadanos__tabla .admin-actions {
+  flex-wrap: nowrap;
+}
+
+.admin-ciudadanos__tabla .btn-small {
+  white-space: nowrap;
+}
+
+/* Responsive menu */
+.nav-desktop { display: flex; }
+.nav-mobile { display: none; }
+
+@media (max-width: 720px) {
+  .nav-bar {
+    overflow-x: hidden;
+  }
+
+  .nav-desktop { display: none; }
+  .nav-mobile { display: block; }
+}
+
+/* Mobile drawer */
+.nav-mobile__bar {
+  background: var(--white);
+  border-top: 1px solid #eef2f6;
+}
+
+.nav-mobile__bar-inner {
+  width: min(var(--container-max), calc(100% - 32px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav-mobile__toggle {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-weight: 900;
+  font-size: 0.98rem;
+  cursor: pointer;
+}
+
+.nav-mobile__drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* 100dvh evita recortes en móviles modernos (barra del sistema) */
+  height: 100dvh;
+  width: min(340px, 86vw);
+  background: var(--primary);
+  color: rgba(255,255,255,0.95);
+  z-index: 3000;
+  transform: translateX(-110%);
+  transition: transform 180ms ease-out;
+  box-shadow: 18px 0 40px rgba(0,0,0,0.25);
+  /* Extra bottom padding para que el footer no quede debajo del menú de navegación (Android) */
+  padding: 16px 16px calc(16px + 12px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-mobile__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 2999;
+  display: none;
+}
+
+.nav-mobile.open .nav-mobile__drawer {
+  transform: translateX(0);
+}
+
+.nav-mobile.open .nav-mobile__backdrop {
+  display: block;
+}
+
+.nav-mobile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.nav-mobile__title {
+  font-weight: 900;
+  color: rgba(255,255,255,0.95);
+}
+
+.nav-mobile__close {
+  border: 0;
+  background: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.95);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-mobile__close:active {
+  transform: scale(0.98);
+}
+
+.nav-mobile__link,
+.nav-mobile__sublink {
+  text-decoration: none;
+  color: rgba(255,255,255,0.95);
+  font-weight: 800;
+  border-radius: 14px;
+  padding: 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  font-size: 1rem;
+}
+
+.nav-mobile__sublink {
+  font-weight: 700;
+  margin-left: 8px;
+  padding-left: 12px;
+  font-size: 0.92rem;
+}
+
+.nav-mobile__link.active,
+.nav-mobile__sublink.active {
+  border-color: rgba(212,175,55,0.55);
+  background: rgba(212,175,55,0.12);
+}
+
+.nav-mobile__group {
+  /* El grupo no debe verse como “contenedor” separado */
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.nav-mobile__group-btn {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+  padding: 12px 12px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  /* Igual al tamaño/tono de los otros items del menú */
+  font-weight: 800;
+  color: rgba(255,255,255,0.95);
+  font-size: 1rem;
+}
+
+.nav-mobile__footer {
+  margin-top: auto;
+  /* Footer centrado y al final del menú, sin quedar tapado */
+  padding: 12px 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.80);
+  font-size: clamp(0.70rem, 2.2vw, 0.84rem);
+  line-height: 1.45;
+  text-align: center;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.nav-mobile__footer-line--nowrap {
+  /* Mantiene la tercera línea en una sola línea (sin que "Sevilla" se vaya abajo) */
+  white-space: nowrap;
+  font-size: clamp(0.66rem, 2.05vw, 0.82rem);
+}
+
+.nav-mobile__footer-line--nowrap a {
+  white-space: nowrap;
+}
+
+.nav-mobile__footer-title {
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  margin-bottom: 6px;
+}
+
+.nav-mobile__footer a {
+  color: rgba(255,255,255,0.95);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.nav-mobile__group-btn .nav-mobile__chev {
+  transition: transform 160ms ease;
+}
+
+.nav-mobile__sub {
+  display: none;
+  padding: 8px 0 0;
+  gap: 8px;
+}
+
+.nav-mobile__group.open .nav-mobile__sub {
+  display: grid;
+}
+
+.nav-mobile__group.open .nav-mobile__chev {
+  transform: rotate(180deg);
+}
+
+.nav-link {
+  padding: 12px 18px;
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-ico {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-ico svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown__toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-dropdown__menu {
+  position: absolute;
+  top: 100%;
+  left: 8px;
+  min-width: 240px;
+  background: var(--white);
+  border: 1px solid #e6ebf1;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  padding: 8px;
+  display: none;
+  z-index: 1200;
+}
+
+.nav-dropdown.open .nav-dropdown__menu {
+  display: block;
+}
+
+/* … (resto del archivo sin cambios) … */
+
+
+.nav-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-dropdown__item:hover {
+  background: rgba(11, 47, 78,0.06);
+}
+
+.nav-dropdown__item.active {
+  background: rgba(11, 47, 78,0.10);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  border-bottom-color: var(--accent);
+}
+
+/* HERO SECTION ADAPTATIVO */
+.hero {
+  padding: 34px 0 72px;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .hero { padding: 44px 0 86px; }
+}
+
+.hero h2 {
+  font-size: clamp(1.8rem, 8vw, 2.5rem);
+  margin-bottom: 8px;
+  padding: 0 16px;
+}
+
+/* CARD / FORMULARIO (Mobile First) */
+.card {
+  background: var(--white);
+  margin: -40px 16px 40px;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid #e6ebf1;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+  max-width: 520px;
+}
+
+.card-secondary {
+  margin: 16px 16px 40px;
+}
+
+/* Tarjetas de páginas sin hero (ej. verificación pública) */
+.card-page {
+  margin: 32px 20px 40px;
+}
+
+@media (min-width: 532px) {
+  .card-page { margin-left: auto; margin-right: auto; }
+}
+
+@media (min-width: 532px) {
+  .card { margin-left: auto; margin-right: auto; }
+}
+
+.form-group { margin-bottom: 18px; }
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 18px; /* Evita zoom automático en iOS */
+  background: #fdfdfd;
+  appearance: none; /* Limpia estilos nativos */
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--text);
+}
+
+textarea {
+  display: block;
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.35;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Input de fecha (mejor legibilidad + icono con color en WebKit) */
+.input-date {
+  font-family: var(--font);
+  color: var(--muted);
+}
+
+.input-date.has-value {
+  color: var(--text);
+}
+
+.input-date::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  /* Aproxima el color al primario (#0B2F4E) */
+  filter: invert(17%) sepia(31%) saturate(2345%) hue-rotate(176deg) brightness(95%) contrast(95%);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--white);
+}
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(11, 47, 78, 0.2);
+  transition: transform 0.1s;
+}
+
+.btn-submit:active {
+  transform: scale(0.98);
+}
+
+/* Mensajes inferiores (intentos / bloqueos) en login Admin */
+.login-attempt-info {
+  margin-top: 12px;
+  color: #777;
+  font-size: 0.86rem;
+  text-align: center;
+}
+
+/* Más vistoso para avisos de bloqueo */
+.login-attempt-info--lockout {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 700;
+  /* Aviso fuerte (más notorio) manteniendo el look del sitio */
+  color: #b71c1c;
+  background: rgba(244, 67, 54, 0.16);
+  border: 1px solid rgba(244, 67, 54, 0.55);
+  box-shadow: 0 6px 14px rgba(244, 67, 54, 0.14);
+}
+
+/* FOOTER */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid #eee;
+}
+
+/* Asegura que el modal de SweetAlert2 no descuadre el diseño móvil */
+.swal2-container {
+  padding: 10px;
+}
+
+.swal2-popup {
+  border-radius: 20px !important; /* Bordes redondeados para un look moderno */
+  font-family: 'Inter', sans-serif !important;
+}
+
+.swal2-title {
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+}
+
+
+/* Utilidad para ocultar elementos en impresión */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Mejora de la tarjeta de visualización */
+#printableCertificate strong {
+  text-transform: uppercase;
+}
+
+/* -------------------------------------------------
+   Modal interno de estado (verificando / generando)
+   (No es ventana emergente del navegador)
+-------------------------------------------------- */
+.status-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+.status-modal__dialog {
+  position: relative;
+  width: min(420px, calc(100% - 40px));
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+  animation: modalPop 160ms ease-out;
+}
+
+.status-modal__spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 4px solid #e5e7eb;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes modalPop {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/*FOOTER -- DEASARROLLADOR*/
+.link-respiracion {
+  color: #4a90e2;          /* azul suave */
+  text-decoration: none;
+  font-weight: bold;
+  animation: respiracion 3s ease-in-out infinite;
+}
+
+@keyframes respiracion {
+  0% {
+    text-shadow: 0 0 2px rgba(74, 144, 226, 0.2);
+    opacity: 0.85;
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+    opacity: 1;
+  }
+  100% {
+    text-shadow: 0 0 2px rgba(74, 144, 226, 0.2);
+    opacity: 0.85;
+  }
+}
+
+.link-respiracion:hover {
+  animation-play-state: paused; /* se detiene al pasar el mouse */
+}
+
+
+
+/* Contenedor de tarjetas apiladas (solo usado en Certificados) */
+.cards-stack {
+  margin: -40px 16px 40px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cards-stack--wide {
+  /* En escritorio necesitamos más ancho para que la tabla de gestión no genere scroll horizontal */
+  max-width: var(--container-wide);
+}
+
+/* Cuando usamos el stack "wide", la tarjeta también debe poder crecer (la regla base la limita a 500px) */
+.cards-stack--wide .card {
+  max-width: 100%;
+}
+
+/* Un poco más compacto en páginas de administración */
+.cards-stack--wide .card {
+  padding: 18px;
+}
+
+@media (max-width: 720px) {
+  .cards-stack--wide .card { padding: 16px; }
+}
+
+.cards-stack .card {
+  margin: 0;
+}
+
+@media (min-width: 532px) {
+  .cards-stack { margin-left: auto; margin-right: auto; }
+}
+
+/* En pantallas grandes, centramos el contenedor ancho para una lectura más cómoda */
+@media (min-width: 992px) {
+  .cards-stack--wide {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Campo de fecha con icono propio (mejor control visual) */
+.date-field {
+  position: relative;
+}
+
+.date-field .input-date {
+  padding-right: 52px; /* espacio para el icono */
+}
+
+/* En escritorio, el input date nativo suele verse más alto de lo necesario.
+   Ajustamos solo en pantallas grandes para mantener el look móvil intacto. */
+@media (min-width: 768px) {
+  /* En escritorio, el campo de fecha puede verse demasiado ancho.
+     Lo limitamos y centramos para que el módulo se vea más balanceado. */
+  .date-field {
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .date-field .input-date {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 16px;
+  }
+}
+
+/* Oculta el icono nativo en WebKit para usar el nuestro */
+.date-field .input-date::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.date-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.date-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--primary);
+}
+
+/* Input de fecha (mejor legibilidad) */
+.input-date {
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.input-date.has-value {
+  color: var(--text);
+}
+
+/* Botón secundario (Salir / acciones auxiliares) */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #fff;
+  border: 1.5px solid rgba(11, 47, 78, 0.45);
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+
+/* -----------------------------
+   Transiciones (sin ventana emergente)
+------------------------------ */
+.inline-loader {
+  padding: 18px 14px;
+}
+
+.inline-loader__spinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 4px solid rgba(11, 47, 78, 0.18);
+  border-top-color: var(--primary);
+  margin: 0 auto;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fade-in {
+  animation: fadeIn 0.22s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -----------------------------
+   Inicio (Home)
+------------------------------ */
+.hero-home .container {
+  padding-bottom: 14px;
+}
+
+.home-wrap {
+  margin: -40px 16px 40px;
+  max-width: var(--container-max);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 532px) {
+  .home-wrap { margin-left: auto; margin-right: auto; }
+}
+
+.home-card {
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--container-max);
+}
+
+.home-photo {
+  width: 100%;
+  height: 190px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(11, 47, 78,0.12), rgba(212,175,55,0.12));
+  border: 1px solid #e6ebf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.home-photo__hint {
+  font-weight: 700;
+  color: rgba(11, 47, 78, 0.55);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 0 14px;
+}
+
+.home-about {
+  margin-top: 14px;
+}
+
+.home-text {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+}
+
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 700px) {
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+
+
+/* Admin: opciones con fondo leve */
+.admin-panel .service-item {
+  background: rgba(11, 47, 78,0.03);
+}
+
+@media (hover: hover) {
+  .admin-panel .service-item:hover {
+    background: rgba(11, 47, 78,0.06);
+    transform: translateY(-1px);
+  }
+}
+.service-item {
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid #e6ebf1;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  transition: transform 0.12s ease;
+}
+
+.service-item:active {
+  transform: scale(0.99);
+}
+
+.service-item--disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.service-item__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(11, 47, 78,0.08);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-item__icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.service-item__title {
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.service-item__desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.service-item__cta {
+  font-weight: 900;
+  color: #fff;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(11, 47, 78, 0.45);
+  background: var(--primary);
+}
+
+.home-divider {
+  height: 1px;
+  background: #eef2f6;
+  margin: 18px 0;
+}
+
+.home-quick-verify {
+  padding-top: 2px;
+}
+
+.verify-inline-form__row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.verify-inline-form__input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.verify-inline-form__btn {
+  width: auto;
+  min-width: 140px;
+  padding: 14px 16px;
+}
+
+@media (max-width: 360px) {
+  .verify-inline-form__input {
+    min-width: 160px;
+  }
+  .verify-inline-form__btn {
+    min-width: 120px;
+  }
+}
+
+.home-social .social-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #e6ebf1;
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 700;
+  background: #fff;
+}
+
+.social-link__icon svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--primary);
+}
+
+
+/* -----------------------------
+   Admin · Gestión de ciudadanos
+------------------------------ */
+
+.alert {
+  padding: 12px 14px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  line-height: 1.35;
+  font-size: 0.95rem;
+  border: 1px solid rgba(11, 47, 78, 0.12);
+  background: rgba(11, 47, 78, 0.06);
+  color: var(--text);
+}
+
+.alert--success {
+  background: rgba(46, 125, 50, 0.10);
+  border-color: rgba(46, 125, 50, 0.35);
+  color: #1b5e20;
+}
+
+.alert--error {
+  background: rgba(244, 67, 54, 0.12);
+  border-color: rgba(244, 67, 54, 0.35);
+  color: #b71c1c;
+}
+
+.alert--warning {
+  background: rgba(255, 152, 0, 0.12);
+  border-color: rgba(255, 152, 0, 0.35);
+  color: #8a4f00;
+}
+
+.alert--info {
+  background: rgba(2, 136, 209, 0.10);
+  border-color: rgba(2, 136, 209, 0.30);
+  color: #01579b;
+}
+
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.admin-toolbar--compact {
+  margin-bottom: 10px;
+}
+
+.admin-toolbar--compact .chip {
+  padding: 7px 11px;
+  font-size: 0.84rem;
+}
+
+.admin-toolbar__left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-toolbar__right {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.admin-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.muted {
+  color: #6d7783;
+}
+
+.tiny {
+  font-size: 0.74rem;
+}
+
+.chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid #e6ebf1;
+  text-decoration: none;
+  color: var(--primary);
+  background: #fff;
+  font-weight: 800;
+  font-size: 0.86rem;
+}
+
+.chip--active {
+  background: rgba(11, 47, 78, 0.10);
+  border-color: rgba(11, 47, 78, 0.25);
+}
+
+.admin-search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-search input {
+  min-width: 260px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #e6ebf1;
+  font-family: var(--font);
+  font-size: 0.95rem;
+}
+
+.btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* Un poco más compacto para que quepan más filas en gestión (PC y móvil) */
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e6ebf1;
+  background: #fff;
+  color: var(--primary);
+  font-weight: 400;
+  font-size: 0.84rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.08s;
+}
+
+/* Botones con icono (texto + SVG) */
+.btn-with-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-with-icon i,
+.btn-with-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Botón Editar: azul oscuro */
+.btn-small--edit {
+  border-color: rgba(11, 47, 78, 0.35);
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-small:active { transform: scale(0.98); }
+
+.btn-small--primary {
+  border-color: rgba(11, 47, 78, 0.40);
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-small--solid {
+  border-color: rgba(11, 47, 78, 0.30);
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-small--muted {
+  background: #fff;
+  color: #2a3d52;
+}
+
+.btn-small--ok {
+  border-color: rgba(46, 125, 50, 0.35);
+  background: rgba(46, 125, 50, 0.10);
+  color: #1b5e20;
+}
+
+.btn-small--warn {
+  border-color: rgba(255, 152, 0, 0.35);
+  background: rgba(255, 152, 0, 0.12);
+  color: #8a4f00;
+}
+
+.btn-small--danger {
+  border-color: rgba(244, 67, 54, 0.35);
+  background: rgba(244, 67, 54, 0.12);
+  color: #b71c1c;
+}
+
+.btn-small--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 0.74rem;
+  border: 1px solid rgba(11, 47, 78, 0.15);
+  background: rgba(11, 47, 78, 0.07);
+  color: #2a3d52;
+}
+
+.tag--ok {
+  background: rgba(46, 125, 50, 0.10);
+  border-color: rgba(46, 125, 50, 0.25);
+  color: #1b5e20;
+}
+
+.tag--off {
+  background: rgba(97, 97, 97, 0.12);
+  border-color: rgba(97, 97, 97, 0.25);
+  color: #424242;
+}
+
+.tag--warn {
+  background: rgba(212, 175, 55, 0.16);
+  border-color: rgba(212, 175, 55, 0.35);
+  color: #7a5b00;
+}
+
+.tag--info {
+  background: rgba(11, 47, 78, 0.12);
+  border-color: rgba(11, 47, 78, 0.25);
+  color: #0B2F4E;
+}
+
+.admin-table-wrap {
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid #e6ebf1;
+}
+
+/* Variante compacta (usada en Registros de certificados) */
+.admin-table-wrap--compact {
+  border-radius: 16px;
+}
+
+.admin-table--compact th,
+.admin-table--compact td {
+  padding: 8px 8px;
+}
+
+.admin-table--compact th {
+  font-size: 0.74rem;
+}
+
+.admin-table--compact .cell-title {
+  font-size: 0.92rem;
+}
+
+.admin-table--compact .cell-sub {
+  font-size: 0.76rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* En escritorio evitamos el scroll horizontal: el layout se ajusta y el texto puede partirse */
+@media (min-width: 992px) {
+  .admin-table {
+    table-layout: fixed;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .admin-col-actions {
+    width: 300px;
+  }
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 9px 10px;
+  border-bottom: 1px solid #eef2f6;
+  border-right: 1px solid #eef2f6;
+  vertical-align: top;
+}
+
+.admin-table th:last-child,
+.admin-table td:last-child {
+  border-right: none;
+}
+
+.admin-table th {
+  background: rgba(11, 47, 78, 0.06);
+  color: #203243;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.admin-col-actions {
+  width: 340px;
+}
+
+/*
+  Texto de celdas (Admin)
+  - Solo el nombre va en negrita (cell-name)
+  - El resto queda con peso moderado (cell-text)
+*/
+.cell-title {
+  font-weight: 650;
+  color: #203243;
+}
+
+.cell-name {
+  font-weight: 900;
+  color: #203243;
+}
+
+.cell-text {
+  font-weight: 500;
+  color: #203243;
+}
+
+.cell-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 650;
+  font-size: 0.92rem;
+  color: #203243;
+}
+
+.cell-sub {
+  margin-top: 4px;
+  font-size: 0.74rem;
+  color: #6d7783;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Botón icon-only (ej. eliminar) */
+.btn-icon {
+  width: 38px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon svg,
+.btn-icon i {
+  width: 18px;
+  height: 18px;
+}
+
+.inline-form { display: inline; }
+
+/* Ajustes de compactación en escritorio: menos saltos de línea y lectura más cómoda */
+@media (min-width: 992px) {
+  /* Registros de certificados (histórico) */
+  .admin-registros__tabla .admin-table--compact {
+    table-layout: fixed;
+  }
+
+  .admin-registros__tabla .admin-table--compact th,
+  .admin-registros__tabla .admin-table--compact td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-registros__tabla .admin-table--compact .cell-code,
+  .admin-registros__tabla .admin-table--compact .cell-name,
+  .admin-registros__tabla .admin-table--compact .cell-text,
+  .admin-registros__tabla .admin-table--compact .cell-sub {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-registros__tabla .admin-table--compact th:nth-child(1),
+  .admin-registros__tabla .admin-table--compact td:nth-child(1) { width: 150px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(2),
+  .admin-registros__tabla .admin-table--compact td:nth-child(2) { width: 240px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(3),
+  .admin-registros__tabla .admin-table--compact td:nth-child(3) { width: 160px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(4),
+  .admin-registros__tabla .admin-table--compact td:nth-child(4) { width: 140px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(5),
+  .admin-registros__tabla .admin-table--compact td:nth-child(5) { width: 170px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(6),
+  .admin-registros__tabla .admin-table--compact td:nth-child(6) { width: 110px; }
+  .admin-registros__tabla .admin-table--compact th:nth-child(7),
+  .admin-registros__tabla .admin-table--compact td:nth-child(7) { width: 140px; }
+
+  .admin-registros__tabla .admin-col-actions {
+    width: 140px;
+  }
+
+  /* Acciones siempre en una fila en escritorio */
+  .admin-registros__tabla .admin-actions {
+    flex-wrap: nowrap;
+  }
+
+  /* Ciudadanos */
+  .admin-ciudadanos__tabla .admin-table {
+    table-layout: fixed;
+  }
+
+  .admin-ciudadanos__tabla .admin-table th,
+  .admin-ciudadanos__tabla .admin-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-ciudadanos__tabla .cell-name,
+  .admin-ciudadanos__tabla .cell-text,
+  .admin-ciudadanos__tabla .cell-sub {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /*
+    Columna de acciones (Ciudadanos)
+    - En escritorio damos espacio real para que quepan los 3 botones en una fila.
+    - Se mantiene nowrap + ellipsis para evitar saltos raros.
+  */
+  .admin-ciudadanos__tabla .admin-col-actions {
+    width: 380px;
+    min-width: 380px;
+  }
+
+  .admin-ciudadanos__tabla .admin-actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+}
+
+
+.admin-cards {
+  display: none;
+  margin-top: 12px;
+  gap: 10px;
+}
+
+/* Tarjetas para listados (ej. Registros de certificados) */
+.admin-card {
+  border: 1px solid #e6ebf1;
+  border-radius: 16px;
+  padding: 12px;
+  background: #fff;
+}
+
+.admin-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-card__mid {
+  margin-top: 10px;
+}
+
+.admin-card__actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-cards--compact .admin-card {
+  padding: 10px;
+}
+
+.admin-cards--compact .cell-sub {
+  font-size: 0.76rem;
+}
+
+.admin-cards--compact {
+  gap: 8px;
+}
+
+.admin-cit-card {
+  border: 1px solid #e6ebf1;
+  border-radius: 16px;
+  padding: 10px;
+  background: #fff;
+}
+
+.admin-cit-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-cit-name {
+  font-weight: 900;
+  color: #203243;
+  font-size: 0.98rem;
+}
+
+.admin-cit-sub {
+  margin-top: 4px;
+  color: #6d7783;
+  font-size: 0.85rem;
+}
+
+.admin-cit-grid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.admin-actions--mobile {
+  margin-top: 12px;
+  justify-content: flex-start;
+}
+
+.pagination {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pagination__meta {
+  color: #6d7783;
+  font-weight: 700;
+}
+
+.empty-state {
+  padding: 18px 14px;
+  border: 1px dashed #dbe1e8;
+  border-radius: 16px;
+  background: rgba(11, 47, 78, 0.03);
+}
+
+.empty-state h3 { margin: 0 0 6px 0; }
+.empty-state p { margin: 0; color: #6d7783; }
+
+.admin-bottom-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-form {
+  margin-top: 4px;
+}
+
+.admin-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field-hint {
+  margin: 8px 0 0 0;
+  font-size: 0.82rem;
+  color: #6d7783;
+}
+
+.admin-switch {
+  margin-top: 12px;
+  border: 1px solid #e6ebf1;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+}
+
+.switch {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.switch input { display: none; }
+
+.switch__slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 47, 78, 0.18);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+
+.switch__slider::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 3px;
+  top: 3px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+  transition: transform 0.15s;
+}
+
+.switch input:checked + .switch__slider {
+  background: rgba(46, 125, 50, 0.28);
+}
+
+.switch input:checked + .switch__slider::after {
+  transform: translateX(22px);
+}
+
+.switch__title {
+  font-weight: 900;
+  color: #203243;
+}
+
+.switch__desc {
+  margin-top: 2px;
+  font-size: 0.86rem;
+  color: #6d7783;
+}
+
+.admin-form__actions {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.admin-mini-card {
+  margin-top: 14px;
+  border: 1px solid #e6ebf1;
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(11, 47, 78, 0.03);
+}
+
+@media (max-width: 820px) {
+  .admin-search input { min-width: 200px; }
+  .admin-col-actions { width: 360px; }
+}
+
+@media (max-width: 720px) {
+  .admin-search input { min-width: 180px; }
+  .admin-table { display: none; }
+  .admin-table-wrap { display: none; }
+  .admin-cards { display: grid; }
+  .admin-form__grid { grid-template-columns: 1fr; }
+  .admin-form__actions { grid-template-columns: 1fr; }
+}
+
+
+/* Botones de acciones: un toque más compactos en listados */
+.admin-registros__tabla .btn-small,
+.admin-ciudadanos__tabla .btn-small {
+  padding: 7px 10px;
+}

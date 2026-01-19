@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% set active="admin" %}
+
+{% block title %}Gestión de ciudadanos · Panel Admin{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h2>Gestión de ciudadanos</h2>
+    <p>Administre el censo: cree y actualice ciudadanos, y active o desactive su afiliación para habilitar la generación de certificados.</p>
+  </div>
+</section>
+
+<div class="cards-stack cards-stack--wide">
+  <div class="card">
+    <div class="fade-in">
+
+      {% if flash %}
+      <div class="alert alert--{{ flash.kind|default('info') }}" role="status" style="display:none;"
+        data-flash-kind="{{ flash.kind|default('info') }}" data-flash-text="{{ flash.text|e }}">
+        {{ flash.text }}
+      </div>
+      {% endif %}
+
+      <div class="admin-toolbar">
+        <div class="admin-toolbar__left">
+          <div class="chip-row" aria-label="Filtros">
+            <a class="chip {% if estado=='activos' %}chip--active{% endif %}" href="{{ url_for('admin_ciudadanos', estado='activos') }}">Activos</a>
+            <a class="chip {% if estado=='inactivos' %}chip--active{% endif %}" href="{{ url_for('admin_ciudadanos', estado='inactivos') }}">Inactivos</a>
+            <a class="chip {% if estado=='todos' %}chip--active{% endif %}" href="{{ url_for('admin_ciudadanos', estado='todos') }}">Todos</a>
+          </div>
+          <div class="admin-meta">
+            <span class="muted">Total: <strong>{{ total }}</strong></span>
+            {% if admin_nombre or admin_username %}
+            <span class="muted">·</span>
+            <span class="muted">{{ admin_nombre|default('') }}{% if admin_username %}<span class="muted"> ({{ admin_username }})</span>{% endif %}</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="admin-toolbar__right">
+          <form method="get" action="{{ url_for('admin_ciudadanos') }}" class="admin-search" role="search">
+            <input type="hidden" name="estado" value="{{ estado }}">
+            <input name="q" value="{{ q|default('') }}" placeholder="Buscar por nombre o documento" autocomplete="off">
+            <button type="submit" class="btn-small btn-small--primary">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <span>Buscar</span>
+            </button>
+          </form>
+          <a href="{{ url_for('admin_ciudadanos_nuevo') }}" class="btn-small btn-small--solid">
+            <i data-lucide="plus" aria-hidden="true"></i>
+            <span>Agregar</span>
+          </a>
+        </div>
+      </div>
+
+      {% if not rows %}
+        <div class="empty-state">
+          <h3>Sin resultados</h3>
+          <p>No encontramos ciudadanos con ese filtro. Pruebe con otra búsqueda o agregue un nuevo registro.</p>
+        </div>
+      {% else %}
+
+      <!-- Tabla (PC) -->
+      <div class="admin-table-wrap admin-ciudadanos__tabla" aria-label="Listado de ciudadanos">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Documento</th>
+              <th>Nacimiento</th>
+              <th>Estado</th>
+              <th class="admin-col-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in rows %}
+            <tr>
+              <td>
+                <div class="cell-name">{{ r.nombre_completo }}</div>
+                <div class="cell-sub">Registrado: {{ r.fecha_registro.strftime('%Y-%m-%d') if r.fecha_registro else '' }}</div>
+              </td>
+              <td>
+                <div class="cell-text">{{ r.tipo_documento }} {{ r.numero_documento }}</div>
+              </td>
+              <td>
+                <div class="cell-text">{{ r.fecha_nacimiento.isoformat() if r.fecha_nacimiento else '—' }}</div>
+              </td>
+              <td>
+                {% if r.activo %}
+                  <span class="tag tag--ok">Activo</span>
+                {% else %}
+                  <span class="tag tag--off">Inactivo</span>
+                {% endif %}
+              </td>
+              <td class="admin-col-actions">
+                <div class="admin-actions">
+                  <a class="btn-small btn-small--edit" href="{{ url_for('admin_ciudadanos_editar', cid=r.id) }}">
+                    <i data-lucide="pencil" aria-hidden="true"></i>
+                    <span>Editar</span>
+                  </a>
+
+                  <form method="post" action="{{ url_for('admin_ciudadanos_toggle', cid=r.id) }}" class="inline-form" data-confirm="¿Seguro que desea {% if r.activo %}desactivar{% else %}activar{% endif %} la afiliación?">
+                    {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+                    <input type="hidden" name="next" value="{{ request.full_path }}">
+                    <button type="submit" class="btn-small {% if r.activo %}btn-small--warn{% else %}btn-small--ok{% endif %}">
+                      {% if r.activo %}
+                        <i data-lucide="user-x" aria-hidden="true"></i>
+                        <span>Desactivar</span>
+                      {% else %}
+                        <i data-lucide="user-check" aria-hidden="true"></i>
+                        <span>Activar</span>
+                      {% endif %}
+                    </button>
+                  </form>
+
+                  <form method="post" action="{{ url_for('admin_ciudadanos_eliminar', cid=r.id) }}" class="inline-form" data-confirm="¿Seguro que desea eliminar este ciudadano? Si tiene certificados generados, el sistema no permitirá eliminar y recomendará desactivar.">
+                    {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+                    <input type="hidden" name="next" value="{{ request.full_path }}">
+                    <button type="submit" class="btn-small btn-small--danger btn-icon" aria-label="Eliminar" title="Eliminar">
+                      <i data-lucide="trash-2" aria-hidden="true"></i>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cards (móvil) -->
+      <div class="admin-cards" aria-label="Listado móvil">
+        {% for r in rows %}
+        <div class="admin-cit-card">
+          <div class="admin-cit-top">
+            <div>
+              <div class="admin-cit-name">{{ r.nombre_completo }}</div>
+              <div class="admin-cit-sub">{{ r.tipo_documento }} {{ r.numero_documento }}</div>
+            </div>
+            <div>
+              {% if r.activo %}
+                <span class="tag tag--ok">Activo</span>
+              {% else %}
+                <span class="tag tag--off">Inactivo</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="admin-cit-grid">
+            <div>
+              <div class="muted tiny">Nacimiento</div>
+              <div class="cell-text">{{ r.fecha_nacimiento.isoformat() if r.fecha_nacimiento else '—' }}</div>
+            </div>
+            <div>
+              <div class="muted tiny">Registro</div>
+              <div class="cell-text">{{ r.fecha_registro.strftime('%Y-%m-%d') if r.fecha_registro else '' }}</div>
+            </div>
+          </div>
+
+          <div class="admin-actions admin-actions--mobile">
+            <a class="btn-small btn-small--edit" href="{{ url_for('admin_ciudadanos_editar', cid=r.id) }}">
+              <i data-lucide="pencil" aria-hidden="true"></i>
+              <span>Editar</span>
+            </a>
+
+            <form method="post" action="{{ url_for('admin_ciudadanos_toggle', cid=r.id) }}" class="inline-form" data-confirm="¿Seguro que desea {% if r.activo %}desactivar{% else %}activar{% endif %} la afiliación?">
+              {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+              <input type="hidden" name="next" value="{{ request.full_path }}">
+              <button type="submit" class="btn-small {% if r.activo %}btn-small--warn{% else %}btn-small--ok{% endif %}">
+                {% if r.activo %}
+                  <i data-lucide="user-x" aria-hidden="true"></i>
+                  <span>Desactivar</span>
+                {% else %}
+                  <i data-lucide="user-check" aria-hidden="true"></i>
+                  <span>Activar</span>
+                {% endif %}
+              </button>
+            </form>
+
+            <form method="post" action="{{ url_for('admin_ciudadanos_eliminar', cid=r.id) }}" class="inline-form" data-confirm="¿Eliminar este ciudadano? (Si tiene certificados, no se eliminará y se recomendará desactivar).">
+              {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+              <input type="hidden" name="next" value="{{ request.full_path }}">
+              <button type="submit" class="btn-small btn-small--danger">
+                <i data-lucide="trash-2" aria-hidden="true"></i>
+                <span>Eliminar</span>
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% endif %}
+
+      {% if pages > 1 %}
+      <div class="pagination">
+        {% if prev_url %}
+          <a class="btn-small btn-small--muted" href="{{ prev_url }}">← Anterior</a>
+        {% else %}
+          <span class="btn-small btn-small--disabled">← Anterior</span>
+        {% endif %}
+        <span class="pagination__meta">Página <strong>{{ page }}</strong> de <strong>{{ pages }}</strong></span>
+        {% if next_url %}
+          <a class="btn-small btn-small--muted" href="{{ next_url }}">Siguiente →</a>
+        {% else %}
+          <span class="btn-small btn-small--disabled">Siguiente →</span>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <div class="admin-bottom-actions">
+        <a href="{{ url_for('admin_panel') }}" class="btn-secondary" style="max-width: 280px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Volver al panel</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

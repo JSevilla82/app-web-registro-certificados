@@ -1,91 +1,111 @@
-# Cabildo Indígena de la Peñata — Certificados (Flask)
+# Plataforma de Certificados Verificables (PDF + Código + QR)
 
-Plataforma para:
-- Verificar ciudadanía en censo
-- Generar certificados oficiales en **PDF desde el servidor**
-- Validar certificados por **QR + URL pública**
+Este proyecto nació de una necesidad real: en el **Cabildo Indígena La Peñata** (comunidad a la que pertenezco) se requería una herramienta para **generar certificados de forma ágil**, con **control administrativo**, y con un mecanismo de **verificación confiable** para evitar falsificaciones o dudas sobre su autenticidad.
 
-## Requisitos
+La idea fue construir una aplicación web sencilla de usar, pero sólida por dentro: permite emitir certificados en PDF, registrar cada emisión y que cualquier entidad receptora pueda **validar el documento** usando un **código único** y un **QR**.
 
-- Python 3.10+ (recomendado 3.11)
+---
 
-## Instalación
+## ¿Qué problema resuelve?
 
-```bash
-python -m venv .venv
-source .venv/bin/activate  # en Windows: .venv\Scripts\activate
+En muchos procesos comunitarios y administrativos, los certificados se manejan de forma manual:
+- se tarda más en emitirlos,
+- es fácil perder el control de qué se generó y cuándo,
+- y para terceros es difícil confirmar si un certificado es real.
 
-pip install -r requirements.txt
-```
+Cuando un documento puede verificarse públicamente, se vuelve más **seguro**, **confiable** y **auditable**.
 
-## Configuración
+---
 
-Copia `.env.example` a `.env` y ajusta valores.
+## ¿Qué ofrece la aplicación?
 
-En producción **debes** definir un `SECRET_KEY` fijo.
+- **Emisión de certificados (PDF):** generación automática con datos del titular y fecha/hora de emisión, más un **código único**.
+- **Verificación pública:** cada certificado incorpora un **QR** que lleva a una página donde se valida su autenticidad.
+- **Panel de administración:** login para emisión y gestión, trazabilidad de actividad y administración del registro de ciudadanos.
+- **Certificados especiales:** permite emitir documentos con contenido adicional/personalizado según el caso.
 
-## Ejecutar
+---
 
-```bash
-python app.py
-```
+## Enfoque de seguridad y confianza
 
-Abrir:
-- Inicio: `/`
-- Generar certificado: `/certificado`
+Además de funcionar, el proyecto se desarrolló con una mentalidad de **ciberseguridad práctica**, especialmente porque se trata de documentos que deben ser confiables.
 
-## Flujo (sin popups)
+- **Códigos únicos + verificación pública:** evita que “un PDF” por sí solo sea tomado como válido; el sistema confirma si existe y corresponde a lo registrado.
+- **Tokens de verificación:** el flujo de emisión usa tokens temporales para controlar que solo se generen certificados tras una validación correcta.
+- **Protección ante abuso (anti intentos):** controles de intentos y bloqueos temporales (por ejemplo en validaciones sensibles), para reducir automatizaciones o fuerza bruta.
+- **Seguridad de sesión y formularios:** protección típica de aplicaciones web (manejo de sesión y medidas como **CSRF** en formularios del panel/admin).
+- **Auditoría/trazabilidad:** registro de emisiones y eventos relevantes, útil para seguimiento y detección de comportamientos anómalos.
+- **Cuidado de datos sensibles:** `.env`, base de datos local y archivos generados se excluyen del repositorio (pensado para publicar el proyecto sin exponer información real).
 
-1) El usuario ingresa tipo y número de documento
-2) Se muestra un modal interno **mínimo 3 segundos**: “Verificando…”
-3) Si existe en el censo, se muestra “Estamos generando el documento…”
-4) El backend genera el PDF, registra el evento, y se habilita “Descargar”
+> Nota: este repositorio está publicado con fines de portafolio. No incluye datos reales.
 
-## Seguridad
+---
 
-- CSRF en requests POST (Flask-WTF)
-- Rate limiting en endpoints sensibles (Flask-Limiter)
-- Headers de seguridad (Flask-Talisman)
-- Validación estricta de entradas (solo dígitos, tipos permitidos)
+## Cómo está organizada (estructura general)
 
-## Auditoría
+La aplicación está dividida por responsabilidades para mantener el código claro y escalable:
 
-Se registra cada certificado en la tabla `documentos_generados`:
-- `creado_en`
-- `ciudadano_id`
-- `codigo` único
-- `pdf_path`
-- `descargado_en` y `descargas`
+- **Rutas / endpoints:** vistas públicas, API y administración.
+- **Modelos:** usuarios, ciudadanos, certificados, intentos/bloqueos, etc.
+- **Servicios:** lógica reutilizable (generación, verificación, búsquedas).
+- **Generador de PDF:** componente dedicado para crear documentos de forma consistente.
 
+Estructura aproximada:
+- `app.py` / `run.py`: arranque y configuración
+- `backend/`: rutas y lógica principal
+- `models/`: persistencia / modelos
+- `services/`: servicios
+- `templates/` y `static/`: interfaz (HTML/CSS/JS)
 
-##################################################################################
+---
 
-Cómo usarlo (ejemplos)
-Listar
-python manage_users.py list
-python manage_users.py list --limit 200
-python manage_users.py list --search "Juan"
+## Tecnologías usadas
 
-Ver un registro
-python manage_users.py show --tipo CC --numero 12345678
+- **Python + Flask**
+- **SQLAlchemy + SQLite**
+- **ReportLab** (PDF)
+- **HTML/CSS/JS**
+- **QR** para verificación
 
-Crear
-python manage_users.py add --nombre "Juan Pérez" --tipo CC --numero 12345678 --nacimiento 1990-05-15
+---
 
-Actualizar
-python manage_users.py update --tipo CC --numero 12345678 --nombre "Juan Pérez García"
-python manage_users.py update --tipo CC --numero 12345678 --nacimiento 1990-05-15
+## Lo más valioso del proyecto
 
-Eliminar
-python manage_users.py delete --tipo CC --numero 12345678
+Este proyecto demuestra habilidades en:
+- construcción de una solución completa (UI + backend + datos),
+- generación de PDFs desde servidor,
+- verificación de autenticidad con códigos/QR,
+- organización del código por capas,
+- seguridad aplicada a un caso real (tokens, control de intentos, CSRF, auditoría y manejo de datos sensibles).
 
-Importar/actualizar desde CSV
+---
 
-CSV con encabezados:
-nombre_completo,tipo_documento,numero_documento,fecha_nacimiento
+## Capturas / Demo (opcional)
 
-python manage_users.py import-csv datos.csv
-python manage_users.py import-csv datos.csv --dry-run
+Puedes agregar aquí:
+- captura del formulario de verificación,
+- captura del panel admin,
+- captura de la página de validación,
+- ejemplo de PDF (con datos anonimizados).
 
-Exportar a CSV
-python manage_users.py export-csv export_ciudadanos.csv
+---
+
+## Próximos pasos (ideas de mejora)
+
+- Soporte para **múltiples tipos de certificados** y **plantillas** configurables.
+- Habilitar modo **multitenant** para que la misma plataforma pueda ser usada por **varios cabildos del pueblo Zenú**, manteniendo **datos y certificados separados por cabildo** (configuración, usuarios, registros y verificación).
+- Exportación de **reportes de auditoría** (por fechas, por cabildo, por tipo de certificado).
+- **Roles y permisos** (multiusuario con distintos niveles de acceso).
+- Migración a **PostgreSQL** para despliegues en producción.
+- Firma digital criptográfica (si el contexto lo requiere).
+
+---
+
+## Aviso
+
+Este repositorio se comparte como muestra de trabajo.  
+Si vas a reutilizar la idea en un entorno real, asegúrate de ajustar políticas de privacidad, infraestructura y controles según el contexto.
+
+---
+
+**Autor:** Jairo Sevilla — *Proyecto en desarrollo*

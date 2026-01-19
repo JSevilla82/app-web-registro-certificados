@@ -104,7 +104,6 @@ Puedes agregar aquí:
 ## Aviso
 
 Este repositorio se comparte como muestra de trabajo.  
-Si vas a reutilizar la idea en un entorno real, asegúrate de ajustar políticas de privacidad, infraestructura y controles según el contexto.
 
 ---
 

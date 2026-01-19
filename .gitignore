@@ -46,3 +46,18 @@ generated/*
 *.key
 *.crt
 *.pfx
+
+
+# --- Imagenes / assets ---
+static/img/*
+!static/img/.gitkeep
+
+# Opcional: ignorar imagenes en cualquier parte del proyecto
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.ico
+

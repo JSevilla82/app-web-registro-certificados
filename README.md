@@ -77,11 +77,13 @@ Estructura aproximada:
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/71e1d033-eae3-4ddd-b953-b8301eef564e" width="300"/></td>
-    <td><img src="https://github.com/user-attachments/assets/121c2252-241d-4faf-94a0-881ddf0f8ef4" width="300"/></td>
+    <td><img src="![WhatsApp Image 2026-01-20 at 8 38 30 PM](https://github.com/user-attachments/assets/f267317d-c0fc-4b45-87df-ee0325c48314)
+" width="300"/></td>
   </tr>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/ab70c9fb-5ed5-4d2a-89ee-e8c31e8dcd65" width="300"/></td>
-    <td><img src="https://github.com/user-attachments/assets/c2956f05-5398-4d4c-a83d-62ca1508fd46" width="300"/></td>
+    <td><img src="![WhatsApp Image 2026-01-20 at 8 38 30 PM 4](https://github.com/user-attachments/assets/2edf354b-3f4f-46d8-b065-ca9aa3359717)
+" width="300"/></td>
   </tr>
 </table>
 

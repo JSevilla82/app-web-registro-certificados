@@ -69,23 +69,13 @@ Estructura aproximada:
 
 ---
 
-## Lo más valioso del proyecto
-
-Este proyecto demuestra habilidades en:
-- construcción de una solución completa (UI + backend + datos),
-- generación de PDFs desde servidor,
-- verificación de autenticidad con códigos/QR,
-- organización del código por capas,
-- seguridad aplicada a un caso real (tokens, control de intentos, CSRF, auditoría y manejo de datos sensibles).
-
----
-
 ## Capturas 
 
 1) <img width="1439" height="896" alt="image" src="https://github.com/user-attachments/assets/e1c7ac10-96e0-4b6e-9c6b-b3324c8264ed" />
 2) <img width="1500" height="906" alt="image" src="https://github.com/user-attachments/assets/82d1f338-9a49-42af-a879-9728865f299d" />
 3) <img width="1269" height="913" alt="image" src="https://github.com/user-attachments/assets/da1f9103-fa43-4022-abe9-73882d348e61" />
-3) <img width="781" height="887" alt="image" src="https://github.com/user-attachments/assets/81bcfe93-36d8-46a3-a8fe-13124a56e691" />
+3) ![certificado_CIP202601210125486161_page-0001 (1)](https://github.com/user-attachments/assets/96b287dc-4ffb-4a40-bd1d-ba1d07f4f110)
+
 
 ---
 

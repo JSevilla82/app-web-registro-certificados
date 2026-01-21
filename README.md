@@ -71,10 +71,22 @@ Estructura aproximada:
 
 ## Capturas 
 
-![88888](https://github.com/user-attachments/assets/005e83dd-d34c-4341-8aa5-662ad38345d1)![WhatsApp Image 2026-01-20 at 8 38 30 PM2](https://github.com/user-attachments/assets/a4e90f96-e6b5-4633-b040-173db4953e76)
-![WhatsApp Image 2026-01-20 at 8 38 30 PM 3](https://github.com/user-attachments/assets/71e1d033-eae3-4ddd-b953-b8301eef564e)![WhatsApp Image 2026-01-20 at 8 38 30 PM](https://github.com/user-attachments/assets/121c2252-241d-4faf-94a0-881ddf0f8ef4)
+## Capturas
 
-![WhatsApp Image 2026-01-20 at 8 38 31 PM 7](https://github.com/user-attachments/assets/ab70c9fb-5ed5-4d2a-89ee-e8c31e8dcd65)![WhatsApp Image 2026-01-20 at 8 38 30 PM 4](https://github.com/user-attachments/assets/c2956f05-5398-4d4c-a83d-62ca1508fd46)
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/005e83dd-d34c-4341-8aa5-662ad38345d1" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/a4e90f96-e6b5-4633-b040-173db4953e76" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/71e1d033-eae3-4ddd-b953-b8301eef564e" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/121c2252-241d-4faf-94a0-881ddf0f8ef4" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/ab70c9fb-5ed5-4d2a-89ee-e8c31e8dcd65" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/c2956f05-5398-4d4c-a83d-62ca1508fd46" width="300"/></td>
+  </tr>
+</table>
 
 ---
 

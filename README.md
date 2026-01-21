@@ -30,7 +30,7 @@ Cuando un documento puede verificarse públicamente, se vuelve más **seguro**, 
 
 Además de funcionar, el proyecto se desarrolló con una mentalidad de **ciberseguridad práctica**, especialmente porque se trata de documentos que deben ser confiables.
 
-- **Códigos únicos + verificación pública:** evita que “un PDF” por sí solo sea tomado como válido; el sistema confirma si existe y corresponde a lo registrado.
+- **Códigos únicos + verificación pública:** evita que “un PDF” por sí solo sea tomado como válido; el sistema confirma si existe y corresponde a lo registrado, la entidad puede ver una copia exacta del documento generado en tiempo real desde el servidor.
 - **Tokens de verificación:** el flujo de emisión usa tokens temporales para controlar que solo se generen certificados tras una validación correcta.
 - **Protección ante abuso (anti intentos):** controles de intentos y bloqueos temporales (por ejemplo en validaciones sensibles), para reducir automatizaciones o fuerza bruta.
 - **Seguridad de sesión y formularios:** protección típica de aplicaciones web (manejo de sesión y medidas como **CSRF** en formularios del panel/admin).

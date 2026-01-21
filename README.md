@@ -71,8 +71,6 @@ Estructura aproximada:
 
 ## Capturas 
 
-## Capturas
-
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/005e83dd-d34c-4341-8aa5-662ad38345d1" width="300"/></td>
@@ -87,6 +85,9 @@ Estructura aproximada:
     <td><img src="https://github.com/user-attachments/assets/c2956f05-5398-4d4c-a83d-62ca1508fd46" width="300"/></td>
   </tr>
 </table>
+
+<img width="1352" height="910" alt="Screenshot_1 (1)" src="https://github.com/user-attachments/assets/a029aa8e-cb51-4b34-9912-3d52eff046f4" />
+![certificado_CIP202601210125486161_page-0001 (2)](https://github.com/user-attachments/assets/c1b39540-0948-4c1a-9efc-971e6d8c4150)
 
 ---
 

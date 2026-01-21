@@ -35,7 +35,6 @@ Además de funcionar, el proyecto se desarrolló con una mentalidad de **ciberse
 - **Protección ante abuso (anti intentos):** controles de intentos y bloqueos temporales (por ejemplo en validaciones sensibles), para reducir automatizaciones o fuerza bruta.
 - **Seguridad de sesión y formularios:** protección típica de aplicaciones web (manejo de sesión y medidas como **CSRF** en formularios del panel/admin).
 - **Auditoría/trazabilidad:** registro de emisiones y eventos relevantes, útil para seguimiento y detección de comportamientos anómalos.
-- **Cuidado de datos sensibles:** `.env`, base de datos local y archivos generados se excluyen del repositorio (pensado para publicar el proyecto sin exponer información real).
 
 > Nota: este repositorio está publicado con fines de portafolio. No incluye datos reales.
 

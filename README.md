@@ -71,11 +71,10 @@ Estructura aproximada:
 
 ## Capturas 
 
-1) <img width="1439" height="896" alt="image" src="https://github.com/user-attachments/assets/e1c7ac10-96e0-4b6e-9c6b-b3324c8264ed" />
-2) <img width="1500" height="906" alt="image" src="https://github.com/user-attachments/assets/82d1f338-9a49-42af-a879-9728865f299d" />
-3) <img width="1269" height="913" alt="image" src="https://github.com/user-attachments/assets/da1f9103-fa43-4022-abe9-73882d348e61" />
-3) ![certificado_CIP202601210125486161_page-0001 (1)](https://github.com/user-attachments/assets/96b287dc-4ffb-4a40-bd1d-ba1d07f4f110)
+![88888](https://github.com/user-attachments/assets/005e83dd-d34c-4341-8aa5-662ad38345d1)![WhatsApp Image 2026-01-20 at 8 38 30 PM2](https://github.com/user-attachments/assets/a4e90f96-e6b5-4633-b040-173db4953e76)
+![WhatsApp Image 2026-01-20 at 8 38 30 PM 3](https://github.com/user-attachments/assets/71e1d033-eae3-4ddd-b953-b8301eef564e)![WhatsApp Image 2026-01-20 at 8 38 30 PM](https://github.com/user-attachments/assets/121c2252-241d-4faf-94a0-881ddf0f8ef4)
 
+![WhatsApp Image 2026-01-20 at 8 38 31 PM 7](https://github.com/user-attachments/assets/ab70c9fb-5ed5-4d2a-89ee-e8c31e8dcd65)![WhatsApp Image 2026-01-20 at 8 38 30 PM 4](https://github.com/user-attachments/assets/c2956f05-5398-4d4c-a83d-62ca1508fd46)
 
 ---
 

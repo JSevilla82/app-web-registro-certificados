@@ -86,8 +86,17 @@ Estructura aproximada:
   </tr>
 </table>
 
-<img width="1352" height="910" alt="Screenshot_1 (1)" src="https://github.com/user-attachments/assets/a029aa8e-cb51-4b34-9912-3d52eff046f4" />
-![certificado_CIP202601210125486161_page-0001 (2)](https://github.com/user-attachments/assets/c1b39540-0948-4c1a-9efc-971e6d8c4150)
+<table>
+  <tr>
+    <td>
+      <img alt="Screenshot_1" src="https://github.com/user-attachments/assets/f61e4ab2-336c-447c-a95c-0dcbd3ac180a" />
+    </td>
+    <td>
+      <img alt="certificado" src="https://github.com/user-attachments/assets/0d01ef25-dca7-462a-98b2-6e0f6e9144ca" />
+    </td>
+  </tr>
+</table>
+
 
 ---
 
